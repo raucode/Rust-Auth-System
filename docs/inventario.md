@@ -31,18 +31,25 @@ restaurantes y no de un sistema de identidad.
 Gardenia, esas tablas siguen vivas allí. Por eso hay que aclarar la relación entre los dos
 repositorios antes de cortar.
 
-## El corte es limpio, salvo por un trigger
+## El corte es limpio
 
 Todas las claves ajenas apuntan hacia `users`: **lo que sobra depende de él y no al revés**, y
 nada de lo que se conserva depende de lo que se va. Las seis tablas se desprenden sin arrastrar
 nada.
 
-La única costura es el trigger **`check_user_profile`**, que se dispara en `users` y lanza una
-excepción si un `owner` no tiene fila en `owners` o un `employer` en `employers`. Mientras exista,
-**no se puede dar de alta a nadie sin decidir de qué tipo de negocio es** — se ve en el formulario
-de registro del frontend de pruebas, que tiene que mandar un perfil de `admin` para esquivarlo.
+> **Corrección del 2026-08-07.** Aquí se dijo que el trigger `check_user_profile` era una costura
+> que obligaba a declarar el tipo de negocio en cada alta. **Es falso.** La migración crea la
+> `FUNCTION auth.check_user_profile()` pero **no hay ningún `CREATE TRIGGER` que la conecte**: es
+> una función huérfana que no se ha ejecutado nunca. Se afirmó al leer la función sin comprobar que
+> algo la disparara.
+>
+> Consecuencia: el corte es **más** limpio de lo dicho, sin ninguna costura. Y lo que de verdad
+> obliga en cada alta no es un trigger, sino que **`state` y `user_type` son `NOT NULL`** en la
+> tabla — dos columnas que se van con el resto del modelo de restaurantes.
 
-Es lo primero que hay que quitar para que `users` vuelva a ser una tabla de personas.
+Lo primero que hay que quitar para que `users` vuelva a ser una tabla de personas son esas dos
+columnas y la función huérfana, que no hace nada pero describe un modelo que ya no será el de este
+sistema.
 
 ## El código
 

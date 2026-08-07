@@ -83,9 +83,10 @@ despliegue.
 ## El recorrido de prueba
 
 1. Abre **`:5173`**. Debe decir «Sin sesión».
-2. **Crea una cuenta.** Pide estado de Brasil y registra como `admin`: es el único tipo que no
-   arrastra CPF ni restaurante, por el trigger `check_user_profile`. Es justo lo que hay que quitar
-   al separar la identidad del negocio.
+2. **Entra con el administrador inicial** del `.env` (`ADMIN_EMAIL` / `ADMIN_PASSWORD`), que se crea
+   al arrancar si no existe. O **crea una cuenta**: el formulario pide estado de Brasil y registra
+   como `admin` porque `state` y `user_type` son `NOT NULL` en la tabla — restos del modelo de
+   restaurantes, y justo lo que hay que quitar al separar la identidad del negocio.
 3. **Entra.** El estado pasa a «Sesión activa» con tu identificador — y lo averigua preguntando a
    `/auth/verify`, no leyendo la cookie: es `HttpOnly` y JavaScript no la ve.
 4. Abre **`:5174`** y pulsa **Ejecutar todo**. Sin haber puesto la contraseña aquí, debe:
@@ -106,7 +107,7 @@ a pedir credenciales.
 | «No se pudo hablar con el auth» | La API no está arrancada, o este origen no está en `CORS_ORIGINS` |
 | Login da 200 pero sigue «Sin sesión» | `COOKIE_SECURE=true` sin HTTPS: el navegador acepta la respuesta y descarta la cookie |
 | 200 pero sin `X-Auth-User` | Falta exponer la cabecera en CORS (`expose_headers`). Un proxy no lo sufre; un navegador sí |
-| El alta da error de trigger | El perfil no coincide con el `user_type`. El trigger exige fila en `owners` / `employers` / `admins` |
+| El alta se queja de `state` o `user_type` | Las dos son `NOT NULL` en la tabla. No hay trigger que lo exija —la función `check_user_profile` existe pero nadie la dispara— es la propia columna |
 | `Address already in use` | El visor está en el 8080. Usa `BIND_ADDR=127.0.0.1:8081` |
 | Chrome no abre `:5173` y Firefox sí | Vite escuchando solo en IPv6. Arranca con `--host 127.0.0.1` |
 

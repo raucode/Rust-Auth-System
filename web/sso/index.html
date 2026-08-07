@@ -45,9 +45,9 @@
     <div class="tarjeta">
       <h2>Crear una cuenta</h2>
       <div class="aviso">
-        El alta pide <strong>estado de Brasil</strong> y <strong>tipo de usuario</strong> porque el
-        esquema viene de un SaaS de restaurantes, y un trigger exige que cada tipo tenga su ficha de
-        perfil. Se registra como <code>admin</code> porque es el único tipo que no pide CPF ni
+        El alta pide <strong>estado de Brasil</strong> porque <code>state</code> y
+        <code>user_type</code> son <code>NOT NULL</code> en la tabla: el esquema viene de un SaaS de
+        restaurantes. Se registra como <code>admin</code>, que es el tipo que no arrastra CPF ni
         restaurante. Es exactamente lo que hay que quitar al separar la identidad del negocio.
       </div>
       <form id="form-registro">
