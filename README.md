@@ -51,4 +51,4 @@ Nunca subas `.env` ni credenciales.
 Es un proyecto de desarrollo. Las cookies se crean con `secure=false` y CORS contiene orígenes
 locales concretos; antes de desplegarlo hay que activar cookies seguras bajo HTTPS, definir los
 orígenes por configuración y revisar el flujo de refresh/revocación. La compilación no se verificó
-en esta máquina porque Cargo no está instalado.
+en el runtime aislado de la sesión, que no expuso Cargo; debe comprobarse desde Distrobox.
