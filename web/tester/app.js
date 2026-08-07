@@ -9,8 +9,8 @@ import '../comun.css'
 // significar «no hay sesión» —correcto si no has entrado— o «el CORS no manda la
 // cookie», y eso son dos arreglos distintos.
 
-const API = import.meta.env.VITE_AUTH_URL ?? 'http://127.0.0.1:8081'
-const ORIGEN_SSO = import.meta.env.VITE_SSO_URL ?? 'http://127.0.0.1:5173'
+const API = import.meta.env.VITE_AUTH_URL ?? 'http://localhost:8081'
+const ORIGEN_SSO = import.meta.env.VITE_SSO_URL ?? 'http://localhost:5173'
 
 const $ = (sel) => document.querySelector(sel)
 

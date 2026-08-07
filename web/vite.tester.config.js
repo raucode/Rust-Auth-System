@@ -8,5 +8,5 @@ import { defineConfig } from 'vite'
 // esos dos problemas quedan invisibles.
 export default defineConfig({
   root: 'tester',
-  server: { host: '127.0.0.1', port: 5174, strictPort: true },
+  server: { host: 'localhost', port: 5174, strictPort: true },
 })

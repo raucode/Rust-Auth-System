@@ -7,7 +7,7 @@ import '../comun.css'
 // funcionar —la API responde 200— pero la sesión no queda en ninguna parte. Es el
 // primer sitio donde se rompe un SSO al salir de una sola aplicación.
 
-const API = import.meta.env.VITE_AUTH_URL ?? 'http://127.0.0.1:8081'
+const API = import.meta.env.VITE_AUTH_URL ?? 'http://localhost:8081'
 
 const ESTADOS_BR = [
   'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG',
