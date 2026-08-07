@@ -1,198 +1,368 @@
 /* Estilo compartido por los dos frontends.
+   ==========================================================================
+
    Toma la paleta del visor de infraestructura, que es el primer cliente previsto
-   del SSO: si las dos piezas van a convivir, conviene que se parezcan. */
+   del SSO: si las dos piezas van a convivir, conviene que se reconozcan.
+
+   El tratamiento es más expresivo que en el visor a propósito. El visor es una
+   herramienta que se mira durante horas y ahí el adorno estorba; esto son dos
+   pantallas cortas que se abren para una cosa concreta, así que aguantan —y
+   agradecen— más presencia. El resplandor se reserva para lo que está activo o
+   pide acción, nunca para todo: si todo brilla, nada destaca. */
 
 :root {
-  --fondo: #070b09;
-  --panel: #0d1310;
-  --panel-alto: #131b17;
-  --borde: #1e2a23;
-  --borde-fuerte: #2b3b32;
-  --texto: #e8f1ea;
-  --suave: #93a89b;
-  --tenue: #61756a;
+  --fondo: #050907;
+  --fondo-alto: #080e0b;
+  --panel: #0b1310;
+  --panel-alto: #111b16;
+  --borde: #1b2a22;
+  --borde-fuerte: #2b3f34;
+  --texto: #e9f3ec;
+  --suave: #94aa9c;
+  --tenue: #5f7469;
   --verde: #24e58a;
-  --verde-vivo: #4dffa6;
-  --sobre-verde: #04140c;
+  --verde-vivo: #5cffb0;
+  --verde-hondo: #0e8f56;
+  --sobre-verde: #02120a;
   --cian: #22d3ee;
   --ambar: #f2b23c;
   --rojo: #ff6b6b;
-  --mono: "Cascadia Code", Consolas, ui-monospace, monospace;
+
+  --mono: "Cascadia Code", "Cascadia Mono", Consolas, ui-monospace, "SF Mono", monospace;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --radio: 10px;
   color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
 
+/* --- Fondo -----------------------------------------------------------------
+   Tres capas: una retícula fina que da referencia, un resplandor verde arriba a
+   la izquierda que marca de dónde viene la luz, y el color base. La retícula es
+   lo que evita que el negro se lea como un vacío plano. */
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--fondo);
+  background-color: var(--fondo);
+  background-image:
+    radial-gradient(58rem 34rem at 12% -8%, color-mix(in oklab, var(--verde) 11%, transparent), transparent 70%),
+    radial-gradient(42rem 30rem at 105% 8%, color-mix(in oklab, var(--cian) 6%, transparent), transparent 70%),
+    linear-gradient(to right, color-mix(in oklab, var(--borde) 40%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--borde) 40%, transparent) 1px, transparent 1px);
+  background-size: auto, auto, 40px 40px, 40px 40px;
+  background-attachment: fixed;
   color: var(--texto);
   font-family: var(--sans);
   line-height: 1.6;
-  padding: 2.5rem 1.25rem 4rem;
+  padding: 3rem 1.25rem 4rem;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Filo luminoso en el borde superior de la ventana. Un detalle, pero es lo que
+   hace que la página se lea como una superficie y no como un documento. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--verde), var(--cian), transparent);
+  opacity: 0.65;
+  z-index: 10;
+  pointer-events: none;
+}
+
+::selection { background: color-mix(in oklab, var(--verde) 32%, transparent); color: var(--texto); }
 
 .envoltorio { max-width: 34rem; margin: 0 auto; }
 .envoltorio.ancho { max-width: 46rem; }
 
+/* --- Cabecera -------------------------------------------------------------- */
+
 .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-family: var(--mono);
   font-size: 0.68rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--verde);
-  margin: 0 0 0.6rem;
+  margin: 0 0 0.7rem;
+}
+/* Punto vivo delante del rótulo: dice «esto está encendido» sin una palabra. */
+.eyebrow::before {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--verde);
+  box-shadow: 0 0 8px var(--verde);
+  animation: latido 2.6s ease-in-out infinite;
+}
+@keyframes latido {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
 }
 
-h1 { font-size: 1.6rem; letter-spacing: -0.02em; margin: 0 0 0.4rem; font-weight: 640; }
-h2 { font-size: 1.02rem; margin: 0 0 0.75rem; font-weight: 620; }
-.bajada { color: var(--suave); margin: 0 0 2rem; font-size: 0.95rem; }
+h1 {
+  font-size: clamp(1.6rem, 4.2vw, 2.1rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  font-weight: 650;
+  margin: 0 0 0.5rem;
+  text-wrap: balance;
+}
+h2 {
+  font-size: 0.96rem;
+  font-weight: 640;
+  letter-spacing: -0.005em;
+  margin: 0 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+/* Filete tras el título de cada tarjeta: separa sin gastar una línea entera. */
+h2::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--borde-fuerte), transparent);
+}
+.bajada { color: var(--suave); margin: 0 0 2.25rem; font-size: 0.95rem; max-width: 34rem; }
+
+/* --- Tarjetas -------------------------------------------------------------- */
 
 .tarjeta {
-  background: var(--panel);
+  position: relative;
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--verde) 3%, transparent), transparent 40%),
+    var(--panel);
   border: 1px solid var(--borde);
-  border-radius: 6px;
-  padding: 1.4rem;
+  border-radius: var(--radio);
+  padding: 1.5rem;
   margin-bottom: 1rem;
+  box-shadow: 0 1px 0 color-mix(in oklab, white 4%, transparent) inset, 0 10px 30px -18px #000;
+  animation: entrar 0.45s cubic-bezier(0.22, 0.9, 0.28, 1) backwards;
+}
+.tarjeta:nth-of-type(1) { animation-delay: 0.02s; }
+.tarjeta:nth-of-type(2) { animation-delay: 0.08s; }
+.tarjeta:nth-of-type(3) { animation-delay: 0.14s; }
+.tarjeta:nth-of-type(4) { animation-delay: 0.2s; }
+
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(9px); }
+  to { opacity: 1; transform: none; }
 }
 
-label { display: block; margin-bottom: 0.85rem; }
+/* --- Formularios ----------------------------------------------------------- */
+
+label { display: block; margin-bottom: 0.95rem; }
 label span {
   display: block;
-  font-size: 0.78rem;
-  color: var(--suave);
-  margin-bottom: 0.25rem;
-}
-input, select {
-  width: 100%;
-  background: var(--fondo);
-  color: var(--texto);
-  border: 1px solid var(--borde-fuerte);
-  border-radius: 4px;
-  padding: 0.5rem 0.65rem;
-  font: inherit;
-  font-size: 0.92rem;
-}
-input:focus, select:focus {
-  outline: 2px solid var(--verde);
-  outline-offset: 1px;
-  border-color: var(--verde);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tenue);
+  margin-bottom: 0.35rem;
 }
 
-.fila { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+input, select {
+  width: 100%;
+  background: var(--fondo-alto);
+  color: var(--texto);
+  border: 1px solid var(--borde-fuerte);
+  border-radius: 6px;
+  padding: 0.58rem 0.7rem;
+  font: inherit;
+  font-size: 0.92rem;
+  transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+}
+input::placeholder { color: var(--tenue); }
+input:hover, select:hover { border-color: color-mix(in oklab, var(--verde) 30%, var(--borde-fuerte)); }
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--verde);
+  background: var(--fondo);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--verde) 16%, transparent);
+}
+input:invalid:not(:placeholder-shown) { border-color: color-mix(in oklab, var(--rojo) 55%, var(--borde-fuerte)); }
+select { appearance: none; cursor: pointer; }
+
+.fila { display: flex; gap: 0.8rem; flex-wrap: wrap; }
 .fila > * { flex: 1; min-width: 8rem; }
+
+/* --- Botones --------------------------------------------------------------- */
 
 button {
   font: inherit;
-  font-weight: 600;
-  font-size: 0.92rem;
-  border-radius: 4px;
-  padding: 0.55rem 1rem;
+  font-weight: 640;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+  border-radius: 6px;
+  padding: 0.58rem 1.15rem;
   cursor: pointer;
   border: 1px solid transparent;
-  background: var(--verde);
+  background: linear-gradient(180deg, var(--verde-vivo), var(--verde));
   color: var(--sobre-verde);
+  transition: transform 0.12s, box-shadow 0.18s, filter 0.18s;
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--verde) 55%, transparent),
+              0 6px 18px -8px color-mix(in oklab, var(--verde) 60%, transparent);
 }
-button:hover:not(:disabled) { background: var(--verde-vivo); }
-button:disabled { opacity: 0.45; cursor: default; }
+button:hover:not(:disabled) {
+  filter: brightness(1.08);
+  box-shadow: 0 0 0 1px var(--verde),
+              0 8px 26px -8px color-mix(in oklab, var(--verde) 75%, transparent);
+}
+button:active:not(:disabled) { transform: translateY(1px); }
+button:disabled { opacity: 0.4; cursor: default; box-shadow: none; filter: saturate(0.4); }
+
 button.secundario {
-  background: transparent;
+  background: var(--panel-alto);
   color: var(--texto);
   border-color: var(--borde-fuerte);
+  box-shadow: none;
 }
-button.secundario:hover:not(:disabled) { background: var(--panel-alto); }
-button:focus-visible { outline: 2px solid var(--verde); outline-offset: 2px; }
+button.secundario:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--verde) 9%, var(--panel-alto));
+  border-color: color-mix(in oklab, var(--verde) 45%, var(--borde-fuerte));
+  filter: none;
+}
+button:focus-visible { outline: 2px solid var(--verde-vivo); outline-offset: 2px; }
 
-.acciones { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.4rem; }
+.acciones { display: flex; gap: 0.65rem; flex-wrap: wrap; margin-top: 0.5rem; }
 
-/* Semáforo de estado. La forma acompaña al color: quien no distingue verde de
-   rojo sigue leyendo la palabra. */
+/* --- Semáforo de sesión ----------------------------------------------------
+   El color no va solo: el punto cambia de brillo y el texto dice el estado, así
+   que se lee igual sin distinguir verde de rojo. */
+
 .estado {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.65rem;
   font-family: var(--mono);
   font-size: 0.82rem;
-  padding: 0.6rem 0.8rem;
-  border-radius: 4px;
+  padding: 0.75rem 0.95rem;
+  border-radius: 8px;
   border: 1px solid var(--borde-fuerte);
-  background: var(--panel-alto);
-  margin-bottom: 1rem;
+  background: var(--panel);
+  margin-bottom: 1.25rem;
+  transition: border-color 0.25s, color 0.25s, box-shadow 0.25s;
 }
 .estado .punto {
-  width: 0.6rem; height: 0.6rem; border-radius: 50%;
-  background: var(--tenue); flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--tenue);
+  flex: none;
+  transition: background-color 0.25s, box-shadow 0.25s;
 }
-.estado.si  { border-color: color-mix(in oklab, var(--verde) 45%, transparent); color: var(--verde); }
-.estado.si .punto { background: var(--verde); }
-.estado.no  { border-color: color-mix(in oklab, var(--rojo) 45%, transparent); color: var(--rojo); }
-.estado.no .punto { background: var(--rojo); }
-.estado.espera { color: var(--ambar); }
-.estado.espera .punto { background: var(--ambar); }
+.estado.si {
+  border-color: color-mix(in oklab, var(--verde) 50%, transparent);
+  color: var(--verde);
+  box-shadow: 0 0 22px -12px var(--verde), 0 0 0 1px color-mix(in oklab, var(--verde) 22%, transparent) inset;
+}
+.estado.si .punto { background: var(--verde); box-shadow: 0 0 10px var(--verde); animation: latido 2.2s ease-in-out infinite; }
+.estado.no { border-color: color-mix(in oklab, var(--rojo) 45%, transparent); color: var(--rojo); }
+.estado.no .punto { background: var(--rojo); box-shadow: 0 0 8px color-mix(in oklab, var(--rojo) 70%, transparent); }
+.estado.espera { color: var(--ambar); border-color: color-mix(in oklab, var(--ambar) 38%, transparent); }
+.estado.espera .punto { background: var(--ambar); animation: latido 1.4s ease-in-out infinite; }
+
+/* --- Consola y registro ----------------------------------------------------- */
 
 pre {
   font-family: var(--mono);
-  font-size: 0.78rem;
+  font-size: 0.77rem;
+  line-height: 1.55;
   background: var(--fondo);
   border: 1px solid var(--borde);
-  border-radius: 4px;
-  padding: 0.8rem;
+  border-radius: 8px;
+  padding: 0.9rem;
   margin: 0;
   overflow-x: auto;
   color: var(--suave);
   white-space: pre-wrap;
   word-break: break-word;
+  box-shadow: 0 2px 12px -8px #000 inset;
 }
 
-.registro { display: grid; gap: 0.4rem; margin-top: 0.5rem; }
+.registro { display: grid; gap: 0.35rem; }
+
+/* Cada línea es una entrada de log: código a la izquierda, filete de color según
+   el resultado. Así una tanda de comprobaciones se lee en vertical de un vistazo. */
 .linea {
   display: grid;
-  grid-template-columns: 4.5rem 1fr;
-  gap: 0.6rem;
+  grid-template-columns: 3.4rem 1fr;
+  gap: 0.75rem;
   font-family: var(--mono);
-  font-size: 0.78rem;
-  padding: 0.45rem 0.6rem;
-  border-radius: 3px;
-  background: var(--panel-alto);
+  font-size: 0.77rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  background: var(--fondo-alto);
+  border-left: 2px solid var(--borde-fuerte);
   align-items: baseline;
+  animation: aparecer 0.28s ease-out backwards;
 }
-.linea .cod { font-weight: 700; }
-.linea.ok   .cod { color: var(--verde); }
-.linea.fail .cod { color: var(--rojo); }
-.linea.info .cod { color: var(--cian); }
+@keyframes aparecer {
+  from { opacity: 0; transform: translateX(-5px); }
+  to { opacity: 1; transform: none; }
+}
+.linea .cod { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
 .linea .txt { color: var(--suave); word-break: break-word; }
+.linea.ok   { border-left-color: var(--verde); background: color-mix(in oklab, var(--verde) 6%, var(--fondo-alto)); }
+.linea.ok   .cod { color: var(--verde); }
+.linea.fail { border-left-color: var(--rojo); background: color-mix(in oklab, var(--rojo) 6%, var(--fondo-alto)); }
+.linea.fail .cod { color: var(--rojo); }
+.linea.info { border-left-color: var(--cian); }
+.linea.info .cod { color: var(--cian); }
+
+/* --- Notas y avisos --------------------------------------------------------- */
 
 .nota {
   font-size: 0.82rem;
   color: var(--suave);
   border-left: 2px solid var(--borde-fuerte);
-  padding-left: 0.8rem;
+  padding-left: 0.85rem;
   margin: 1rem 0 0;
 }
 .aviso {
   font-size: 0.82rem;
-  background: color-mix(in oklab, var(--ambar) 9%, var(--panel));
+  line-height: 1.55;
+  background: color-mix(in oklab, var(--ambar) 8%, var(--panel));
   border: 1px solid color-mix(in oklab, var(--ambar) 30%, transparent);
-  border-radius: 4px;
-  padding: 0.7rem 0.85rem;
-  margin-bottom: 1rem;
+  border-left-width: 3px;
+  border-radius: 8px;
+  padding: 0.8rem 0.95rem;
+  margin-bottom: 1.1rem;
   color: var(--texto);
 }
+
 code {
   font-family: var(--mono);
   font-size: 0.86em;
   background: var(--panel-alto);
   border: 1px solid var(--borde);
-  padding: 0.05em 0.3em;
-  border-radius: 3px;
+  padding: 0.08em 0.34em;
+  border-radius: 4px;
+  color: var(--verde);
+  white-space: nowrap;
 }
+
 .pie {
   margin-top: 2.5rem;
-  padding-top: 1rem;
+  padding-top: 1.2rem;
   border-top: 1px solid var(--borde);
   font-size: 0.78rem;
+  line-height: 1.6;
   color: var(--tenue);
 }
-.pie a { color: var(--cian); }
+.pie code { color: var(--suave); }
+
+/* Barras de scroll a tono: dos franjas gris claro son lo primero que delata un
+   tema oscuro hecho a medias. */
+* { scrollbar-color: var(--borde-fuerte) transparent; scrollbar-width: thin; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

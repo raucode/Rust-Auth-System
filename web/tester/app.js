@@ -1,3 +1,5 @@
+import '../comun.css'
+
 // Cliente de pruebas del SSO.
 //
 // Hace de servicio consumidor: **no tiene login propio**. Solo comprueba que una

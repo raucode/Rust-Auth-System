@@ -4,7 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Iniciar sesión · Core Suite</title>
-  <link rel="stylesheet" href="../comun.css" />
+  <!-- El estilo se importa desde `app.js`, no con un <link>: `comun.css` vive
+       fuera del `root` de Vite (que es esta carpeta), y un <link> relativo se
+       resuelve contra la raíz del servidor, donde no existe. Vite devolvía el
+       index.html de recambio y la página se quedaba sin estilo. Importado desde
+       JS entra en el grafo de módulos y se resuelve bien, también al construir. -->
 </head>
 <body>
   <div class="envoltorio">

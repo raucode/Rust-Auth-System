@@ -1,3 +1,5 @@
+import '../comun.css'
+
 // Pantalla de sesión del SSO.
 //
 // Todas las llamadas van con `credentials: 'include'`. Sin eso el navegador no
