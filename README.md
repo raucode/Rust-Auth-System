@@ -19,10 +19,43 @@ POST /auth/user/register
 POST /auth/user/login
 POST /auth/user/refresh
 POST /auth/user/logout
+GET  /auth/verify                 # 200 o 401, para un proxy inverso
 
 GET  /api/profile                 # requiere autenticación
 POST /api/me                      # requiere autenticación
 GET  /api/me/summary              # requiere autenticación
+```
+
+### `GET /auth/verify`
+
+No sirve contenido: responde **200** si la cookie de sesión es válida —con el identificador del
+usuario en la cabecera `X-Auth-User`— y **401** si no. Está pensado para que un proxy inverso lo
+consulte antes de servir una ruta protegida (`auth_request` en nginx, `forwardAuth` en Traefik).
+
+Con eso, **un servicio detrás del proxy no necesita saber nada de JWT**: recibe la identidad ya
+resuelta en una cabecera.
+
+> El proxy **tiene que borrar cualquier cabecera `X-Auth-*` que llegue de fuera** antes de reenviar
+> la petición. Si un cliente pudiera mandarla, se declararía quien quisiera. Es la regla que
+> sostiene todo el esquema.
+
+Ejemplo con nginx:
+
+```nginx
+location /visor/ {
+    auth_request     /_auth;
+    auth_request_set $usuario $upstream_http_x_auth_user;
+
+    proxy_set_header X-Auth-User $usuario;   # la escribe el proxy...
+    proxy_pass       http://127.0.0.1:8080/; # ...y el servicio confía solo en él
+}
+
+location = /_auth {
+    internal;
+    proxy_pass              http://127.0.0.1:8081/auth/verify;
+    proxy_pass_request_body off;
+    proxy_set_header        Content-Length "";
+}
 ```
 
 ## Ejecutar localmente
