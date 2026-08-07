@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar sesión · Core Suite</title>
+  <link rel="stylesheet" href="../comun.css" />
+</head>
+<body>
+  <div class="envoltorio">
+    <p class="eyebrow">Core Suite · identidad</p>
+    <h1>Iniciar sesión</h1>
+    <p class="bajada">
+      La pantalla del propio sistema de identidad. Aquí se entra una vez; los demás
+      servicios preguntan por ti sin volver a pedirte nada.
+    </p>
+
+    <div id="estado" class="estado espera">
+      <span class="punto"></span>
+      <span id="estado-txt">Comprobando sesión…</span>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Entrar</h2>
+      <form id="form-login">
+        <label>
+          <span>Correo</span>
+          <input type="email" name="email" autocomplete="username" required />
+        </label>
+        <label>
+          <span>Contraseña</span>
+          <input type="password" name="password" autocomplete="current-password" required />
+        </label>
+        <div class="acciones">
+          <button type="submit">Entrar</button>
+          <button type="button" id="btn-salir" class="secundario">Cerrar sesión</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Crear una cuenta</h2>
+      <div class="aviso">
+        El alta pide <strong>estado de Brasil</strong> y <strong>tipo de usuario</strong> porque el
+        esquema viene de un SaaS de restaurantes, y un trigger exige que cada tipo tenga su ficha de
+        perfil. Se registra como <code>admin</code> porque es el único tipo que no pide CPF ni
+        restaurante. Es exactamente lo que hay que quitar al separar la identidad del negocio.
+      </div>
+      <form id="form-registro">
+        <label>
+          <span>Nombre completo</span>
+          <input type="text" name="full_name" required />
+        </label>
+        <label>
+          <span>Correo</span>
+          <input type="email" name="email" autocomplete="username" required />
+        </label>
+        <label>
+          <span>Contraseña</span>
+          <input type="password" name="password" autocomplete="new-password" required minlength="6" />
+        </label>
+        <div class="fila">
+          <label>
+            <span>Teléfono (opcional)</span>
+            <input type="tel" name="phone" />
+          </label>
+          <label>
+            <span>Estado</span>
+            <select name="state" id="sel-estado"></select>
+          </label>
+        </div>
+        <div class="acciones">
+          <button type="submit">Crear cuenta</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Qué ha pasado</h2>
+      <div id="registro" class="registro"></div>
+      <p class="nota" id="sin-actividad">Todavía no se ha llamado a la API.</p>
+    </div>
+
+    <p class="pie">
+      Auth en <code id="pie-api"></code> · este origen: <code id="pie-origen"></code><br />
+      La cookie de sesión es <code>HttpOnly</code>, así que <strong>este JavaScript no puede
+      leerla</strong>: el estado de sesión se averigua preguntando a la API, que es también como lo
+      hará un proxy inverso.
+    </p>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

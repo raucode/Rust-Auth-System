@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cliente de pruebas · Core Suite</title>
+  <link rel="stylesheet" href="../comun.css" />
+</head>
+<body>
+  <div class="envoltorio ancho">
+    <p class="eyebrow">Core Suite · cliente de pruebas</p>
+    <h1>Probar el SSO desde otro origen</h1>
+    <p class="bajada">
+      Esto hace de servicio consumidor: no tiene login propio y vive en otro puerto,
+      igual que le pasará al visor de infraestructura. Si la sesión funciona aquí,
+      funciona como SSO.
+    </p>
+
+    <div id="estado" class="estado espera">
+      <span class="punto"></span>
+      <span id="estado-txt">Sin comprobar</span>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Batería de comprobaciones</h2>
+      <p class="nota" style="margin-top:0">
+        Entra primero en la pantalla de sesión (<code>:5173</code>) y vuelve aquí. Esta página nunca
+        pide tu contraseña — es el punto de la prueba.
+      </p>
+      <div class="acciones">
+        <button type="button" id="btn-todo">Ejecutar todo</button>
+        <button type="button" id="btn-verify" class="secundario">Solo /auth/verify</button>
+        <button type="button" id="btn-refresh" class="secundario">Solo /refresh</button>
+        <button type="button" id="btn-limpiar" class="secundario">Limpiar</button>
+      </div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Resultado</h2>
+      <div id="registro" class="registro"></div>
+      <p class="nota" id="sin-actividad">Pulsa «Ejecutar todo» para empezar.</p>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Perfil que devuelve la API</h2>
+      <pre id="perfil">— sin datos —</pre>
+      <p class="nota">
+        Viene de <code>/api/profile</code>, que está detrás del middleware. Es la prueba de que la
+        cookie emitida en un origen sirve para pedir datos protegidos desde otro.
+      </p>
+    </div>
+
+    <p class="pie">
+      Auth en <code id="pie-api"></code> · este origen: <code id="pie-origen"></code><br />
+      Los dos frontends están en puertos distintos <strong>a propósito</strong>: es lo que ejercita
+      el CORS con credenciales y el <code>SameSite</code> de las cookies. Con todo en el mismo puerto,
+      esos dos fallos quedan invisibles hasta el despliegue.
+    </p>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

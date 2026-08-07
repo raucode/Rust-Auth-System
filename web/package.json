@@ -1,0 +1,13 @@
+{
+  "name": "core-suite-web",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Dos frontends para probar el auth: la pantalla de sesión y un cliente que la consume desde otro origen",
+  "scripts": {
+    "sso": "vite --config vite.sso.config.js",
+    "tester": "vite --config vite.tester.config.js"
+  },
+  "devDependencies": {
+    "vite": "^8.2.0"
+  }
+}

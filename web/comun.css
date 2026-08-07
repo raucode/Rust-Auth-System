@@ -1,0 +1,198 @@
+/* Estilo compartido por los dos frontends.
+   Toma la paleta del visor de infraestructura, que es el primer cliente previsto
+   del SSO: si las dos piezas van a convivir, conviene que se parezcan. */
+
+:root {
+  --fondo: #070b09;
+  --panel: #0d1310;
+  --panel-alto: #131b17;
+  --borde: #1e2a23;
+  --borde-fuerte: #2b3b32;
+  --texto: #e8f1ea;
+  --suave: #93a89b;
+  --tenue: #61756a;
+  --verde: #24e58a;
+  --verde-vivo: #4dffa6;
+  --sobre-verde: #04140c;
+  --cian: #22d3ee;
+  --ambar: #f2b23c;
+  --rojo: #ff6b6b;
+  --mono: "Cascadia Code", Consolas, ui-monospace, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: var(--sans);
+  line-height: 1.6;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+.envoltorio { max-width: 34rem; margin: 0 auto; }
+.envoltorio.ancho { max-width: 46rem; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--verde);
+  margin: 0 0 0.6rem;
+}
+
+h1 { font-size: 1.6rem; letter-spacing: -0.02em; margin: 0 0 0.4rem; font-weight: 640; }
+h2 { font-size: 1.02rem; margin: 0 0 0.75rem; font-weight: 620; }
+.bajada { color: var(--suave); margin: 0 0 2rem; font-size: 0.95rem; }
+
+.tarjeta {
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  padding: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+label { display: block; margin-bottom: 0.85rem; }
+label span {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--suave);
+  margin-bottom: 0.25rem;
+}
+input, select {
+  width: 100%;
+  background: var(--fondo);
+  color: var(--texto);
+  border: 1px solid var(--borde-fuerte);
+  border-radius: 4px;
+  padding: 0.5rem 0.65rem;
+  font: inherit;
+  font-size: 0.92rem;
+}
+input:focus, select:focus {
+  outline: 2px solid var(--verde);
+  outline-offset: 1px;
+  border-color: var(--verde);
+}
+
+.fila { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+.fila > * { flex: 1; min-width: 8rem; }
+
+button {
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.92rem;
+  border-radius: 4px;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: var(--verde);
+  color: var(--sobre-verde);
+}
+button:hover:not(:disabled) { background: var(--verde-vivo); }
+button:disabled { opacity: 0.45; cursor: default; }
+button.secundario {
+  background: transparent;
+  color: var(--texto);
+  border-color: var(--borde-fuerte);
+}
+button.secundario:hover:not(:disabled) { background: var(--panel-alto); }
+button:focus-visible { outline: 2px solid var(--verde); outline-offset: 2px; }
+
+.acciones { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.4rem; }
+
+/* Semáforo de estado. La forma acompaña al color: quien no distingue verde de
+   rojo sigue leyendo la palabra. */
+.estado {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 4px;
+  border: 1px solid var(--borde-fuerte);
+  background: var(--panel-alto);
+  margin-bottom: 1rem;
+}
+.estado .punto {
+  width: 0.6rem; height: 0.6rem; border-radius: 50%;
+  background: var(--tenue); flex: none;
+}
+.estado.si  { border-color: color-mix(in oklab, var(--verde) 45%, transparent); color: var(--verde); }
+.estado.si .punto { background: var(--verde); }
+.estado.no  { border-color: color-mix(in oklab, var(--rojo) 45%, transparent); color: var(--rojo); }
+.estado.no .punto { background: var(--rojo); }
+.estado.espera { color: var(--ambar); }
+.estado.espera .punto { background: var(--ambar); }
+
+pre {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  background: var(--fondo);
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  padding: 0.8rem;
+  margin: 0;
+  overflow-x: auto;
+  color: var(--suave);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.registro { display: grid; gap: 0.4rem; margin-top: 0.5rem; }
+.linea {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 3px;
+  background: var(--panel-alto);
+  align-items: baseline;
+}
+.linea .cod { font-weight: 700; }
+.linea.ok   .cod { color: var(--verde); }
+.linea.fail .cod { color: var(--rojo); }
+.linea.info .cod { color: var(--cian); }
+.linea .txt { color: var(--suave); word-break: break-word; }
+
+.nota {
+  font-size: 0.82rem;
+  color: var(--suave);
+  border-left: 2px solid var(--borde-fuerte);
+  padding-left: 0.8rem;
+  margin: 1rem 0 0;
+}
+.aviso {
+  font-size: 0.82rem;
+  background: color-mix(in oklab, var(--ambar) 9%, var(--panel));
+  border: 1px solid color-mix(in oklab, var(--ambar) 30%, transparent);
+  border-radius: 4px;
+  padding: 0.7rem 0.85rem;
+  margin-bottom: 1rem;
+  color: var(--texto);
+}
+code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  background: var(--panel-alto);
+  border: 1px solid var(--borde);
+  padding: 0.05em 0.3em;
+  border-radius: 3px;
+}
+.pie {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--borde);
+  font-size: 0.78rem;
+  color: var(--tenue);
+}
+.pie a { color: var(--cian); }

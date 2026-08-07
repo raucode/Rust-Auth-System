@@ -1,5 +1,15 @@
 # Rust Auth System
 
+> **Rumbo:** madurarlo hasta ser el sistema de identidad único (SSO) de la infraestructura interna,
+> con el visor de infraestructura como primer cliente.
+>
+> - [`docs/camino-a-sso.md`](docs/camino-a-sso.md) — adónde va, por qué en ese orden, y qué está hecho
+> - [`docs/inventario.md`](docs/inventario.md) — qué se reutiliza, qué se adapta y qué sobra
+> - [`docs/probar-en-local.md`](docs/probar-en-local.md) — levantarlo todo y el recorrido de prueba
+>
+> Dos frontends en `web/`: la pantalla de sesión (`:5173`) y un cliente de pruebas en otro origen
+> (`:5174`).
+
 Backend de autenticación y gestión de usuarios escrito en Rust. Proporciona sesiones basadas en JWT
 en cookies, refresh tokens persistidos en PostgreSQL y un conjunto inicial de rutas protegidas.
 
